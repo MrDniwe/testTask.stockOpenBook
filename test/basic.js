@@ -1,5 +1,5 @@
 const expect = require("chai").expect;
-const lib = require("../src");
+const lib = require("../src/lib");
 
 const mocks = {
   valid: [
@@ -47,7 +47,29 @@ const mocks = {
       rate: 120,
       amount: true
     }
-  ]
+  ],
+  crossInOnePrice: {
+    bids: [
+      {
+        rate: 100,
+        amount: 0.1
+      },
+      {
+        rate: 90,
+        amount: 0.1
+      }
+    ],
+    asks: [
+      {
+        rate: 90,
+        amount: 0.1
+      },
+      {
+        rate: 100,
+        amount: 0.1
+      }
+    ]
+  }
 };
 
 describe("Проверим сам факт налиция функции", () => {
@@ -104,5 +126,8 @@ describe("Проверяем первичную обработку входящ�
     expect(() => lib.openBookCross(mocks.invalidValue2, mocks.valid)).to.throw(
       TypeError
     );
+  });
+  it("и не выбрасывается ошибка для валидных элементов", () => {
+    expect(() => lib.openBookCross(mocks.valid, mocks.valid)).not.to.throw();
   });
 });
