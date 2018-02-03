@@ -5,7 +5,8 @@
   "author": "Sergey Belevskiy",
   "license": "MIT",
   "scripts": {
-    "test": "mocha test/**/*.js"
+    "test": "mocha test/**/*.js",
+    "testwatch": "mocha --watch test/**/*.js"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
