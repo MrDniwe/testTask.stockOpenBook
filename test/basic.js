@@ -135,7 +135,7 @@ describe("Проверяем первичную обработку входящ�
 });
 
 describe("Проверяем функцию проведения транзакции", () => {
-  it("бид и аск не пересекаются по цене: возврат исходных бид-аск, транзакция null", () => {
+  it("бид и аск не пересекаются по цене: возврат null", () => {
     const bid = {
       rate: 10,
       amount: 1
@@ -144,11 +144,7 @@ describe("Проверяем функцию проведения транзак�
       rate: 15,
       amount: 1
     };
-    expect(lib.proceedTransaction(bid, ask)).to.deep.equal({
-      bid,
-      ask,
-      transaction: null
-    });
+    expect(lib.proceedTransaction(bid, ask)).to.be.null;
   });
   it("бид и аск пересекаются, объемы одинаковые: возврат null бид-аск, транзакция", () => {
     let bid, ask;
@@ -299,7 +295,7 @@ describe("Проверяем проведение массива транзак�
         amount: 3
       }
     ];
-    expect(lib.openBookCross(bids, asks))
+    expect(lib.openBookCross(asks, bids))
       .to.be.an("array")
       .and.to.have.lengthOf(0);
   });
@@ -346,6 +342,55 @@ describe("Проверяем проведение массива транзак�
         percent: 100 / 12
       }
     ];
-    expect(lib.openBookCross(bids, asks)).to.deep.equal(expectedTransactions);
+    expect(lib.openBookCross(asks, bids)).to.deep.equal(expectedTransactions);
+  });
+  it("Проверка с частичным выполнением проводок", () => {
+    let bids = [
+      {
+        rate: 15,
+        amount: 3
+      },
+      {
+        rate: 14,
+        amount: 2
+      },
+      {
+        rate: 13,
+        amount: 1
+      }
+    ];
+    let asks = [
+      {
+        rate: 10,
+        amount: 1
+      },
+      {
+        rate: 11,
+        amount: 2
+      },
+      {
+        rate: 12,
+        amount: 3
+      }
+    ];
+    let expectedTransactions = [
+      {
+        amount: 1,
+        percent: 50
+      },
+      {
+        amount: 2,
+        percent: 400 / 11
+      },
+      {
+        amount: 2,
+        percent: 200 / 12
+      },
+      {
+        amount: 1,
+        percent: 100 / 12
+      }
+    ];
+    expect(lib.openBookCross(asks, bids)).to.deep.equal(expectedTransactions);
   });
 });

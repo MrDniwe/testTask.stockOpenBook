@@ -13,6 +13,20 @@ function openBookCross(asks, bids) {
   //отсортируем массивы на всякий случай
   asks = asks.sort((a, b) => a.rate - b.rate);
   bids = bids.sort((a, b) => a.rate - b.rate).reverse();
+
+  let transactions = [];
+  let currentTransaction;
+
+  //проводим массив транзакций
+  while (
+    (currentTransaction = proceedTransaction(bids.shift(), asks.shift()))
+  ) {
+    if (currentTransaction.bid) bids.unshift(currentTransaction.bid);
+    if (currentTransaction.ask) asks.unshift(currentTransaction.ask);
+    if (currentTransaction.transaction)
+      transactions.push(currentTransaction.transaction);
+  }
+  return transactions;
 }
 
 function assertFormat(incoming) {
@@ -26,7 +40,7 @@ function assertFormat(incoming) {
 }
 
 function proceedTransaction(bid, ask) {
-  if (ask.rate > bid.rate) return { bid, ask, transaction: null };
+  if (!ask || !bid || ask.rate >= bid.rate) return null;
   let [min, max] = [Math.min(ask.rate, bid.rate), Math.max(ask.rate, bid.rate)];
   let transaction = {
     amount: Math.min(ask.amount, bid.amount),
