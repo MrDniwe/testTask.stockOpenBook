@@ -25,6 +25,27 @@ function assertFormat(incoming) {
   );
 }
 
+function proceedTransaction(bid, ask) {
+  if (ask.rate > bid.rate) return { bid, ask, transaction: null };
+  let [min, max] = [Math.min(ask.rate, bid.rate), Math.max(ask.rate, bid.rate)];
+  let transaction = {
+    amount: Math.min(ask.amount, bid.amount),
+    percent: 100 * (max - min) / min
+  };
+  return {
+    bid:
+      bid.amount - transaction.amount
+        ? { amount: bid.amount - transaction.amount, rate: bid.rate }
+        : null,
+    ask:
+      ask.amount - transaction.amount
+        ? { amount: ask.amount - transaction.amount, rate: ask.rate }
+        : null,
+    transaction
+  };
+}
+
 module.exports = {
-  openBookCross
+  openBookCross,
+  proceedTransaction
 };
