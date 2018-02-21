@@ -72,27 +72,27 @@ const mocks = {
   }
 };
 
-describe("Проверим сам факт налиция функциий", () => {
-  it("то что мы сымпортили - объект", () => {
+describe("Testing fact of availability function itself", () => {
+  it("make sure that we imported object", () => {
     expect(lib).to.be.an("object");
   });
-  it("он имеет свойство openBookCross и это функция", () => {
+  it("it has openBookCross property and this property is a function", () => {
     expect(lib).to.have.property("openBookCross");
     expect(lib.openBookCross).to.be.a("function");
   });
-  it("он имеет свойство proceedTransaction и это функция", () => {
+  it("it has property proceedTransaction and this property is a function", () => {
     expect(lib).to.have.property("proceedTransaction");
     expect(lib.proceedTransaction).to.be.a("function");
   });
 });
 
-describe("Проверяем первичную обработку входящих параметров", () => {
-  it("если один из атрибутов отсутствует или не массив, ждем TypeError", () => {
+describe("Primary testing of incoming parameters", () => {
+  it("if one of attributes is absent or not array, expecting TypeError", () => {
     expect(() => lib.openBookCross()).to.throw(TypeError);
     expect(() => lib.openBookCross(mocks.valid)).to.throw(TypeError);
     expect(() => lib.openBookCross({}, mocks.valid)).to.throw(TypeError);
   });
-  it("если один из атрибутов не содержит элементов, возвращаем пустой массив", () => {
+  it("if one of attributes has no elements, expecting emty array", () => {
     expect(lib.openBookCross(mocks.valid, []))
       .to.be.an("array")
       .and.have.lengthOf(0);
@@ -103,7 +103,7 @@ describe("Проверяем первичную обработку входящ�
       .to.be.an("array")
       .and.have.lengthOf(0);
   });
-  it("если среди переданных элементов любого массива хотя бы один не отвечает установленному формату, выбрасывается ошибка TypeError", () => {
+  it("if any of elements of any given arrays missing expecting format, throwing TypeError", () => {
     expect(() => lib.openBookCross(mocks.valid, mocks.invalidKey1)).to.throw(
       TypeError
     );
@@ -129,13 +129,13 @@ describe("Проверяем первичную обработку входящ�
       TypeError
     );
   });
-  it("и не выбрасывается ошибка для валидных элементов", () => {
+  it("and no error throwing for valid elements", () => {
     expect(() => lib.openBookCross(mocks.valid, mocks.valid)).not.to.throw();
   });
 });
 
-describe("Проверяем функцию проведения транзакции", () => {
-  it("бид и аск не пересекаются по цене: возврат null", () => {
+describe("Testing transaction function", () => {
+  it("if bid and ask are not crossing py price: expecting null", () => {
     const bid = {
       rate: 10,
       amount: 1
@@ -146,7 +146,7 @@ describe("Проверяем функцию проведения транзак�
     };
     expect(lib.proceedTransaction(bid, ask)).to.be.null;
   });
-  it("бид и аск пересекаются, объемы одинаковые: возврат null бид-аск, транзакция", () => {
+  it("bid and ask are crossing, volumes are same: expecting null bid and ask, transaction", () => {
     let bid, ask;
     bid = {
       rate: 15,
@@ -181,7 +181,7 @@ describe("Проверяем функцию проведения транзак�
       }
     });
   });
-  it("бид и аск пересекаются, bid больше по объему: возврат null аск, разница бид, транзакция", () => {
+  it("bid and ask are crossing, bid more than ask by volume: expecting null ask, bid difference, transaction", () => {
     let bid, ask;
     bid = {
       rate: 15,
@@ -222,7 +222,7 @@ describe("Проверяем функцию проведения транзак�
       }
     });
   });
-  it("бид и аск пересекаются, ask больше по объему: возврат null бид, разница аск, транзакция", () => {
+  it("bid and ask are crossing, ask more than bid by volume: expecting null bid, ask difference, transaction", () => {
     let bid, ask;
     bid = {
       rate: 13,
@@ -265,8 +265,8 @@ describe("Проверяем функцию проведения транзак�
   });
 });
 
-describe("Проверяем проведение массива транзакций", () => {
-  it("В массивах бид/аск нет пересекающихся цен, возвращается пустой массив транзакций", () => {
+describe("Tests of executing array of transactions", () => {
+  it("there are no crossing prices in bid/ask arrays, expecting empty array of transactions", () => {
     let bids = [
       {
         rate: 15,
@@ -299,7 +299,7 @@ describe("Проверяем проведение массива транзак�
       .to.be.an("array")
       .and.to.have.lengthOf(0);
   });
-  it("Проводим самый простой набор бид/аск, где всё одного объема и пересекается точно", () => {
+  it("executing simpliest crossing, where all volumes are the same", () => {
     let bids = [
       {
         rate: 15,
@@ -344,7 +344,7 @@ describe("Проверяем проведение массива транзак�
     ];
     expect(lib.openBookCross(asks, bids)).to.deep.equal(expectedTransactions);
   });
-  it("Проверка с частичным выполнением проводок", () => {
+  it("executing partially", () => {
     let bids = [
       {
         rate: 15,

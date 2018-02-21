@@ -1,9 +1,8 @@
-### Функция наложения биржевых Open Book
+### Test task: function for stock Open Book transactions
 
-Сама функция находится в _/src/lib.js#openBookCross_
+Function body in _/src/lib.js#openBookCross_
 
-Входящие данные для запуска через `node .` она берет из _/src/data.js_
+Input data for `node .`  will be taken from _/src/data.js_
 
-Тесты `node test` или `node testwatch`
+Tests running `node test` or `node testwatch`
 
-Неспешно ушло часа 4, в основном на написание тестов.  
